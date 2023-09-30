@@ -1,23 +1,14 @@
 package br.com.mrocigno.kotlinscript
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PointF
 import android.util.AttributeSet
-import android.util.Log
+import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
-import java.lang.Math.min
-import java.lang.Math.pow
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.cos
 import kotlin.math.pow
-import kotlin.math.sin
 import kotlin.math.sqrt
 
 
@@ -70,12 +61,13 @@ class TurnPageTest @JvmOverloads constructor(
     }
 
     private fun computeVerticesFromEllipse(columns: Int, rows: Int, curveFactor: Float): FloatArray {
-        val center = mWidth / 2.5
+        val center = mWidth / (2.0  * (1f - fraction))
         val curve = (curveFactor * fraction) * center
 
         val vertices = FloatArray(((columns + 1) * 2) * (rows + 1))
 
-        val increment = mWidth / columns
+
+        val increment = mWidth * (1f - AccelerateInterpolator(5f).getInterpolation(fraction)) / columns
         var index = 0
 
         repeat(columns + 1) {
